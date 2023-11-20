@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  nginx:
+    image: ilhmyz/case-test-idnmedia:nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./php/app/blog:/var/www/html
+    depends_on:
+      - php
+    networks:
+      - idn-network
+
+  php:
+    image: ilhmyz/case-test-idnmedia:php
+    volumes:
+      - ./php/app/blog:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - idn-network
+
+  db:
+    image: ilhmyz/case-test-idnmedia:mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: yuna_232_H&l
+      MYSQL_DATABASE: db_simple_blog
+      MYSQL_USER: deku
+      MYSQL_PASSWORD: bnha
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - idn-network
+
+volumes:
+  mysql-data:
+
+networks:
+  idn-network:
+    driver: bridge
